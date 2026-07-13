@@ -1,0 +1,1 @@
+# this is my day one of learning ai and ai agent
