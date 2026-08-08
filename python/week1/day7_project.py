@@ -65,8 +65,20 @@ def get_score(subject):
     提示：用 while True 配合 return —— 合法就 return，不合法就 continue。
          判断字符串是不是纯数字可以用 .isdigit()
     """
-    # TODO
-    pass
+    score = 0
+    while True:
+        if subject == "chinese":
+            score = input("请输入语文成绩（0-100）：")
+        elif subject == "math":
+            score = input("请输入数学成绩（0-100)：")
+        elif subject == "english":
+            score = input("请输入英语成绩（0-100)：")
+        else:
+            score = input("请输入成绩（0-100)：")
+
+        if score.isdigit() and 0 <= int(score) <= 100:
+            return int(score)
+        print("输入无效，请重新输入！")
 
 
 def input_one_student():
@@ -78,20 +90,33 @@ def input_one_student():
 
     提示：三科分数调用 get_score() 来拿，别重复写输入逻辑。
     """
-    # TODO
-    pass
-
+    name = input("请输入学生姓名（直接回车结束录入）：")
+    if name == "" or len(name) > 10:
+        return None
+    chinese_score = get_score("chinese")
+    math_score = get_score("math")
+    english_score = get_score("english")
+    student = {
+        "name": name,
+        "chinese": chinese_score,
+        "math": math_score,
+        "english": english_score
+    }
+    print(f"已录入学生：{student['name']}，语文：{student['chinese']}，数学：{student['math']}，英语：{student['english']}")
+    return student
+# input_one_student()
 
 def total(student):
     """返回这个学生的总分。"""
-    # TODO
-    pass
+    student_total_score = student["chinese"] + student["math"] + student["english"]
+    return student_total_score
+
 
 
 def average(student):
     """返回这个学生的平均分（float，不用管小数位数，输出时再控制）。"""
-    # TODO
-    pass
+    student_average_score = total(student) / 3
+    return student_average_score
 
 
 def grade(avg):
@@ -99,8 +124,16 @@ def grade(avg):
     根据平均分返回等级字符串：
         90 及以上 A / 80-89 B / 70-79 C / 60-69 D / 60 以下 F
     """
-    # TODO
-    pass
+    if avg >= 90:
+        return "A"
+    elif avg >= 80:
+        return "B"
+    elif avg >= 70:
+        return "C"
+    elif avg >= 60:
+        return "D"
+    else:
+        return "F"
 
 
 def print_table(students):
@@ -112,8 +145,10 @@ def print_table(students):
         f"{score:>5}" 右对齐占 5 格
         f"{avg:>6.1f}" 右对齐占 6 格保留 1 位小数
     """
-    # TODO
-    pass
+    print(f"{'姓名':<8} {'语文':>5} {'数学':>5} {'英语':>5} {'总分':>5} {'平均分':>6} {'等级':<4}")
+    print("-" * 50)
+    for student in students:
+        print(f"{student['name']:<8} {student['chinese']:>5} {student['math']:>5} {student['english']:>5} {total(student):>5} {average(student):>6.1f} {grade(average(student)):<4}")
 
 
 def print_summary(students):
@@ -123,20 +158,35 @@ def print_summary(students):
     提示：找最高分的学生，可以先假设第一个是最高，然后遍历比较替换。
          列表为空时要注意别报错。
     """
-    # TODO
-    pass
+    for student in students:
+        print(f"学生：{student['name']}，总分：{total(student)}，平均分：{average(student):.1f}，等级：{grade(average(student))}")
 
 
 def main():
     """
     主流程：
-      1. 建一个空列表 students
+      1. 建一个学生列表 students，包含默认数据
       2. while 循环调 input_one_student()，返回 None 就 break，否则 append
       3. 如果一个人都没录，提示"没有数据"然后结束
       4. 调 print_table() 和 print_summary()
     """
-    # TODO
-    pass
+    students = [
+        {"name": "小明", "chinese": 90, "math": 85, "english": 78},
+        {"name": "小红", "chinese": 88, "math": 92, "english": 95},
+        {"name": "小刚", "chinese": 80, "math": 70, "english": 60}
+    ]
+    while True:
+        student = input_one_student()
+        if student is None:
+            break
+        students.append(student)
+
+    if not students:
+        print("没有数据")
+        return
+
+    print_table(students)
+    print_summary(students)
 
 
 # 这行的意思：只有直接运行这个文件时才执行 main()
