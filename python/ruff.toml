@@ -1,0 +1,39 @@
+# ruff 配置 —— 一个自动帮你抓错的工具（第 2 周新增）
+#
+# 已装好（ruff 0.16.2），不用再装。
+# 用它：  cd /Users/tian/Downloads/Study/python && python3 -m ruff check week2/
+#
+# 装完之后在 VS Code 里装 "Ruff" 扩展（发布者 Astral Software），
+# 它会在你写代码的时候直接画波浪线，不用手动跑命令。
+
+line-length = 100
+
+[lint]
+# 只开对你现在有用的规则，不搞一堆噪音
+select = [
+    "F",    # 真 bug：变量没定义、import 了没用、函数重复定义
+    "E",    # 代码风格错误
+    "W",    # 警告
+    "A",    # ★ 用内置名当变量名 —— 你 Day 3 写过 sum = 0，Day 4 写过 list = [...]
+    "B",    # ★ 常见陷阱：裸 except、可变默认参数、循环里改列表
+    "SIM",  # 能简化的写法：if 能写成三元、能用 in 代替一串 or
+    "UP",   # 老写法 → 新写法（比如 % 格式化 → f-string）
+]
+
+ignore = [
+    "E501",   # 行太长 —— 练习文件里注释很长，不算问题
+    "E402",   # import 不在文件开头 —— 练习文件结构特殊
+    "E741",   # 变量名叫 l/I/O
+    "T201",   # 用了 print —— 你现在就是要用 print
+    "SIM108", # 建议 if/else 改三元 —— 有时候 if/else 更好读，别被它逼着改
+    "SIM905", # 建议 "a,b".split(",") 直接写成列表 —— 但教学示例就是要演示 split 本身
+]
+
+[lint.per-file-ignores]
+# 练习文件的特殊情况。这些不是"放过错误"，是这类文件本来就该这样：
+"week*/day*.py" = [
+    "F841",   # 定义了没用的变量 —— 题目给的数据你可能只用一部分
+    "F401",   # import 了没用 —— 骨架文件先 import 好，等你写实现时才会用上
+    "UP015",  # open(f, "r") 里的 "r" 多余 —— 但 Day 10 就是要对比 r/w/a，得写出来
+    "B905",   # zip() 没写 strict= —— 这是进阶话题，现在讲反而干扰
+]

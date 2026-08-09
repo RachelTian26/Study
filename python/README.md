@@ -11,7 +11,7 @@
 | 前 10 分钟 | 打开昨天写的文件，重读一遍自己的代码。看不懂了就说明当时没学懂，先补 |
 | 中间 40 分钟 | 看教程 / 视频，**边看边跟着敲**，不要只看 |
 | 后 60 分钟 | 关掉教程，做当天的练习文件。卡住先自己想 10 分钟 |
-| 最后 10 分钟 | 在 `diary.md` 写三行：今天学了什么、哪里卡住了、明天要注意什么 |
+| 最后 10 分钟 | 写 `dayN_summary.md`（照 `SUMMARY_TEMPLATE.md` 的格式），然后 git commit |
 
 **三条规则（比计划本身更重要）**
 
@@ -66,7 +66,7 @@ Python 3.14.5 已经装好了，VS Code 也有。只需要：
 | Day | 日期 | 学什么 | 教程章节 | 练习文件 | 完成标准 |
 |---|---|---|---|---|---|
 | 8 | 08-08 六 | 字符串处理 + 格式化 | 廖雪峰"字符串和编码" | `week2/day8_string.py` | `split/join/strip/replace` 用熟 |
-| 9 | 08-09 日 | 轻松日：复习 + 刷 Codewars | codewars.com 注册，做 8kyu | 无 | 做完 5 道 8kyu 题 |
+| 9 | 08-09 日 | 轻松日：自测 + 刷 Codewars | codewars.com 注册，做 8kyu | `week2/day9_review.py` | 10 道自测 + 5 道 8kyu 题 |
 | 10 | 08-10 一 | 文件读写 | 廖雪峰"文件读写" | `week2/day10_file.py` | 会用 `with open()`，知道 `r/w/a` 区别 |
 | 11 | 08-11 二 | 异常处理 try/except | 廖雪峰"错误处理" | `week2/day11_error.py` | 知道该捕获什么、不该捕获什么 |
 | 12 | 08-12 三 | JSON 读写（你的老朋友） | 廖雪峰"序列化" | `week2/day12_json.py` | Python dict ↔ JSON 文件互转 |
@@ -151,4 +151,16 @@ Python 3.14.5 已经装好了，VS Code 也有。只需要：
 
 ## 进度记录
 
-每天做完在 `diary.md` 里打勾记一行。31 天后回头看会很有意思。
+每天写 `weekN/dayN_summary.md`，格式见 `SUMMARY_TEMPLATE.md`，然后提交一次：
+
+```bash
+cd /Users/tian/Downloads/Study
+git add python/
+git commit -m "week2 day10: 文件读写"
+```
+
+**每天一个 commit，这是从今天开始的新规矩。** 原来的 `diary.md` 我删了 —— 你 8 天没动过它，
+但每天的 `dayN_summary.md` 都写得很认真，那个已经完全替代了日记的作用。与其维护两份，不如把
+"卡在哪"这一段加进 summary（模板里已经加好了，是必填项）。
+
+31 天后 `git log` 就是你的完整学习记录，比日记好看。

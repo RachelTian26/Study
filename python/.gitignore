@@ -1,0 +1,25 @@
+# 虚拟环境（相当于 node_modules，Day 13 会建）
+.venv/
+venv/
+
+# Python 缓存。import 自己的模块之后会自动生成，不用管
+__pycache__/
+*.py[cod]
+
+# 练习产生的文件，不是代码
+week2/output.txt
+week2/log.txt
+week2/run_log.txt
+week2/numbered.txt
+week2/demo.json
+week2/*.tmp
+week2/events_out.json
+week2/events_new.json
+week2/pending.json
+week2/contacts.json
+week2/grades.json
+week2/grades.txt
+week2/recurring.json
+
+# 系统垃圾文件
+.DS_Store

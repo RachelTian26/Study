@@ -1,0 +1,9 @@
+Python is a programming language that lets you work quickly and integrate
+systems more effectively. Python is powerful and fast, plays well with others,
+runs everywhere, is friendly and easy to learn, and is open. These are some of
+the reasons people who use Python would rather not use anything else.
+
+Readability counts. Simple is better than complex. Complex is better than
+complicated. Now is better than never. If the implementation is hard to
+explain, it is a bad idea. If the implementation is easy to explain, it may be
+a good idea.

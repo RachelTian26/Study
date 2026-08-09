@@ -1,0 +1,62 @@
+[
+  {
+    "id": "e1",
+    "date": "2026-08-12",
+    "title": "写数学作业",
+    "startTime": "16:00",
+    "duration": 60,
+    "description": "第三章练习题 1-15",
+    "status": "done",
+    "activityType": "study"
+  },
+  {
+    "id": "e2",
+    "date": "2026-08-12",
+    "title": "背英语单词",
+    "startTime": "19:30",
+    "duration": 30,
+    "description": "",
+    "status": "pending",
+    "activityType": "study"
+  },
+  {
+    "id": "e3",
+    "date": "2026-08-12",
+    "title": "打羽毛球",
+    "startTime": "20:30",
+    "duration": 90,
+    "description": "跟小明约的",
+    "status": "pending",
+    "activityType": "sport"
+  },
+  {
+    "id": "e4",
+    "date": "2026-08-13",
+    "title": "物理实验报告",
+    "startTime": "14:00",
+    "duration": 120,
+    "description": "electricity 那一章",
+    "status": "pending",
+    "activityType": "study"
+  },
+  {
+    "id": "e5",
+    "date": "2026-08-13",
+    "title": "学 Python",
+    "startTime": "10:00",
+    "duration": 120,
+    "description": "Day 12 JSON",
+    "status": "done",
+    "activityType": "study"
+  },
+  {
+    "id": "e6",
+    "date": "2026-08-14",
+    "title": "整理房间",
+    "startTime": "",
+    "duration": 40,
+    "description": "答应我妈的",
+    "status": "pending",
+    "activityType": "life"
+  }
+]
