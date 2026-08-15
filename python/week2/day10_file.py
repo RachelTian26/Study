@@ -172,6 +172,29 @@ for line in lines[1:]:
 #   一共多少行、多少个单词、多少个字符（不含空白）
 # 提示：单词数可以把整个文件 .split() 之后数长度
 # TODO
+article_path = DATA / "article.txt"
+
+
+def parse_file(path):
+    with open(path) as f:
+        content = f.read()
+
+    lines = content.splitlines()         # 先按行拆
+    words = content.split()              # 再按空白拆单词
+    chars_no_space = "".join(content.split())
+
+    print("行数:", len(lines))
+    print("单词数:", len(words))
+    print("字符数（不含空白）:", len(chars_no_space))
+
+    return {
+        "lines": len(lines),
+        "words": len(words),
+        "chars_no_space": len(chars_no_space),
+    }
+
+
+parse_file(article_path)
 
 
 # --- 第 2 题 ---
@@ -180,15 +203,30 @@ for line in lines[1:]:
 #   2 | 文件就是硬盘上的一段文字...
 # 要求：跳过空行，行号右对齐占 2 格
 # 提示：enumerate(f, start=1) 可以让计数从 1 开始
-# TODO
+with open(notes_path, "r", encoding="utf-8") as f:
+    for line_no, line in enumerate(f, start=1):
+        if not line.strip():
+            continue
+        print(f"{line_no:>2} | {line.strip()}")
 
 
 # --- 第 3 题 ---
 # 把第 2 题的结果**写进**一个新文件 numbered.txt，而不是打印
 # 写完后自己打开文件确认一下
 # 提示：一个 with 读，一个 with 写；或者先读进列表再写
-# TODO
+numbered_path = DATA / "numbered.txt"
+print(numbered_path)
+lines_to_write = []
+with open(notes_path, "r", encoding="utf-8") as f:
+    for line_no, line in enumerate(f, start=1):
+        if not line.strip():
+            continue
+        lines_to_write.append(f"{line_no:>2} | {line.strip()}\n")
 
+with open(numbered_path, "w", encoding="utf-8") as f:
+    f.writelines(lines_to_write)
+
+print(f"已写入 {numbered_path.name}")
 
 # --- 第 4 题 ---
 # 读 data/scores.csv，只处理"格式完整且三科都是数字"的行，
@@ -199,16 +237,67 @@ for line in lines[1:]:
 # 这题是 Day 7 那个你没写完的 print_summary 的第二次机会 ——
 # 这次数据来自文件，不用手输了。
 # 提示：判断"是不是数字"先用 .isdigit()，Day 11 会有更好的写法
-# TODO
+with open(csv_path, "r", encoding="utf-8") as f:
+    lines = f.readlines()
 
+valid_students = []
+for line_no, line in enumerate(lines[1:], start=2):
+    line = line.strip()
+    if not line:
+        continue
+
+    parts = [p.strip() for p in line.split(",")]
+    if len(parts) != 4:
+        print(f"第 {line_no} 行数据有问题，已跳过")
+        continue
+
+    name, chinese, math, english = parts
+    if not chinese.isdigit() or not math.isdigit() or not english.isdigit():
+        print(f"第 {line_no} 行数据有问题，已跳过")
+        continue
+
+    valid_students.append({
+        "name": name,
+        "chinese": int(chinese),
+        "math": int(math),
+        "english": int(english),
+    })
+
+print("=" * 30)
+print(f"{'姓名':<8}{'语文':>6}{'数学':>6}{'英语':>6}")
+print("-" * 30)
+for student in valid_students:
+    print(f"{student['name']:<8}{student['chinese']:>6}{student['math']:>6}{student['english']:>6}")
+
+chinese_total = sum(s["chinese"] for s in valid_students)
+math_total = sum(s["math"] for s in valid_students)
+english_total = sum(s["english"] for s in valid_students)
+count = len(valid_students)
+
+print("-" * 30)
+print(f"{'平均分':<8}{(chinese_total / count):>6.2f}{(math_total / count):>6.2f}{(english_total / count):>6.2f}")
+print(f"语文平均分：{chinese_total / count:.2f}")
+print(f"数学平均分：{math_total / count:.2f}")
+print(f"英语平均分：{english_total / count:.2f}")
 
 # --- 第 5 题 ---
 # 做一个"运行记录器"：每次运行这个文件，就往 run_log.txt 追加一行，
 # 内容是「第 N 次运行」，N 要接着上次的数往下数。
 # 提示：先读文件数一下已经有几行（文件可能还不存在，要判断），再追加
 # 这题的核心是体会 "a" 模式和 "程序有记忆" 是什么意思
-# TODO
+run_log_path = HERE / "run_log.txt"
 
+if run_log_path.exists():
+    with open(run_log_path, "r", encoding="utf-8") as f:
+        count = len(f.readlines())
+else:
+    count = 0
+
+count += 1
+with open(run_log_path, "a", encoding="utf-8") as f:
+    f.write(f"第 {count} 次运行\n")
+
+print(f"已记录：第 {count} 次运行")
 
 # --- 第 6 题（挑战）---
 # 写一个函数 word_count(path, top_n=5)：
@@ -219,8 +308,25 @@ for line in lines[1:]:
 #       sorted(counts.items(), key=lambda kv: kv[1], reverse=True)
 #       lambda 是"一次性小函数"，key= 告诉 sorted 按什么排。
 #       看不懂就先照抄，Day 13 之后再回来理解
-# TODO
 
+def word_count(path, top_n=5):
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read().lower()
+
+    words = content.split()
+    counts = {}
+
+    for word in words:
+        cleaned = word.strip(".,!?\"'()")
+        if not cleaned:
+            continue
+        counts[cleaned] = counts.get(cleaned, 0) + 1
+
+    ordered = sorted(counts.items(), key=lambda kv: kv[1], reverse=True)
+    return ordered[:top_n]
+
+
+print(word_count(article_path, 5))
 
 # --- 第 7 题（挑战）---
 # 把 Day 7 的成绩统计器改造一下：录入完成后，把成绩表存进 grades.txt，
