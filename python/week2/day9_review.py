@@ -40,10 +40,35 @@ Part 0 和 Part 1 是今天的核心，它们决定后半周你该补什么。
 #      提示：先想清楚 .isdigit() 为什么不行，再想别的办法。
 #           float() 转不了会报错 —— 这正好是 Day 11 要学的东西，今天先感受一下难点在哪。
 #           今天用别的办法绕过去也行，绕不过去就把问题记下来，Day 11 会给你正确工具。
-#
+
+def get_score(subject):
+    while True:
+        score_str = input(f"请输入{subject}成绩（0-100）：")
+        try:
+            score = float(score_str)
+            if 0 <= score <= 100:
+                return score
+            else:
+                print("分数必须在 0 到 100 之间，请重新输入。")
+        except ValueError:
+            print("输入无效，请输入一个数字。")
+
+
 #   2) grade(avg)
 #      纯逻辑，应该 2 分钟写完。写不出来说明 elif 链还没熟。
-#
+
+def grade(avg):
+    if avg >= 90:
+        return "A"
+    elif avg >= 80:
+        return "B"
+    elif avg >= 70:
+        return "C"
+    elif avg >= 60:
+        return "D"
+    else:
+        return "F"
+
 #   3) print_summary(students)
 #      ⚠️ 这个 Day 7 你没写对 —— 需求要的是**全班统计**，你写的是又把每个人打印了一遍。
 #      这次严格按需求来，输出三样东西：
@@ -74,6 +99,38 @@ Part 0 和 Part 1 是今天的核心，它们决定后半周你该补什么。
 #   隔一周从零再写一遍，才知道哪些是真的进了脑子。
 #   这个动作 Day 30 还会再做一次整套 —— 今天先小规模练一下。
 
+def print_summary(students):
+    print("total student number is", len(students))
+
+    max_score = 0
+    max_student = ""
+    chinese_sum = 0
+    math_sum = 0
+    english_sum = 0
+    for student in students:
+        total_score = 0
+        total_score = (student["chinese"] + student["math"] + student["english"])
+        chinese_sum += student["chinese"]
+        math_sum += student["math"]
+        english_sum += student["english"]
+        print("max score "  , max_score)
+        if total_score > max_score:
+            max_score = total_score
+            max_student = student["name"]
+
+    print("chinese average score is", chinese_sum / len(students))
+    print("math average score is", math_sum / len(students))
+    print("english average score is", english_sum / len(students))
+    print("max score and max student is "  , max_score, max_student)
+
+
+students = [
+    {"name": "小明", "chinese": 90, "math": 85, "english": 78},
+    {"name": "小红", "chinese": 88, "math": 92, "english": 95},
+]
+print_summary(students)
+# print_summary([])
+
 # ============================================================
 # Part 1  手感自测（30 分钟）
 # ============================================================
@@ -92,36 +149,94 @@ Part 0 和 Part 1 是今天的核心，它们决定后半周你该补什么。
 # （这是根 README 里第 1 周的验收标准第一条，必须会）
 # TODO
 
+# def average(numbers):
+#     total = 0
+#     for num in numbers:
+#         total += int(num)
+#     return total / len(numbers)
+
+# input_numbers = input("请输入五个数字，用逗号分隔")
+# parts = input_numbers.split(",")
+# numbers = [float(p.strip()) for p in parts]
+
+# if len(numbers) != 5:
+#     print("请输入五个数字，用逗号分隔")
+# else:
+#     print("max number is", max(numbers))
+#     print("average number is", average(numbers))
+
 
 # --- 2 --- 把 [3, 7, 3, 1, 7, 9] 去重，保持第一次出现的顺序
 # TODO
-
+numbers = [3, 7, 3, 1, 7, 9]
+result = []
+for num in numbers:
+    if num not in result:
+        result.append(num)
+print(result)
 
 # --- 3 --- 用**列表推导式**做出 1-20 里所有偶数的平方
 # （不许用 for + append。这是你第 1 周的弱项，今天专门练）
 # TODO
-
+numbers = 0
+for num in range(1, 21):
+    if num % 2 == 0:
+        print ("num is ", num , num**2)
 
 # --- 4 --- 统计 "the quick brown fox jumps over the lazy dog the end" 里每个词出现几次
 # TODO
+text = "the quick brown fox jumps over the lazy dog the end"
+words = text.split()
+
+counts = {}
+for word in words:
+    counts[word] = counts.get(word, 0) + 1
+
+print(counts)
 
 
 # --- 5 --- 把 {"数学": 92, "语文": 78, "英语": 85} 里分数最高的科目名找出来
 # （Day 5 第 2 题你这里写出过 bug，看看今天能不能写对）
 # TODO
-
+score = {"数学": 92, "语文": 78, "英语": 85}
+max_score = 0
+max_subject = " "
+for subject in score:
+    print (score[subject])
+    if score[subject] > max_score:
+        max_score = score[subject]
+        max_subject = subject
+print (max_subject, max_score)
 
 # --- 6 --- 写一个函数，接收一个列表，返回里面所有偶数的和。列表为空要返回 0，不能崩
 # TODO
+# def sumodd(numbers):
+#     total = 0
+#     for num in numbers:
+#         if num % 2 == 0:
+#             total += int(num)
+#     return total
+
+
+# input_numbers = input("请输入一组数字，用空格分开: ")
+# parts = input_numbers.split(" ")
+# numbers = [float(p.strip()) for p in parts]
+
+# print("sum of odd number is", sumodd(numbers))
 
 
 # --- 7 --- 把 "  2026-08-09  " 解析成三个整数 year, month, day
 # TODO
+date = "2026-08-09"
+parts = date.split("-")
+print(parts[0],"year",parts[1],"month",parts[2],"day")
 
 
 # --- 8 --- 把 ["小明", "小红", "小刚"] 拼成 "小明、小红、小刚"
 # TODO
-
+names = ["小明", "小红", "小刚"]
+result = "、".join(names)
+print(result)
 
 # --- 9 --- 打印一行，姓名左对齐占 8 格，分数右对齐占 5 格保留 1 位小数
 # TODO
@@ -133,7 +248,7 @@ Part 0 和 Part 1 是今天的核心，它们决定后半周你该补什么。
 #         sum = 0
 #         for s in scores:
 #             sum += s
-#         print(sum / len(scores))
+#         return sum / len(scores)
 #
 #     result = get_avg([90, 85, 78])
 #     print(f"平均分 {result}")
@@ -141,7 +256,7 @@ Part 0 和 Part 1 是今天的核心，它们决定后半周你该补什么。
 # 提示：一个是命名问题，一个是 print/return 问题，一个是"某种输入会崩"
 # 三个都是你第 1 周真实犯过的。把你找到的写在下面注释里：
 #
-# 问题 1：
+# 问题 1： 253行，”90, 85, 78“应该是scores
 # 问题 2：
 # 问题 3：
 #
