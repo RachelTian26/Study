@@ -24,8 +24,8 @@ DATA = HERE / "data"
 try:
     n = int("abc")            # 这行会炸
     print("这行永远不会执行")
-except ValueError:
-    print("转换失败，接住了")
+except ValueError as e:
+    print("转换失败，接住了", e)
 
 print("程序还活着 ←重点在这")
 
@@ -38,8 +38,8 @@ print("程序还活着 ←重点在这")
 # ValueError：类型对但值不对
 try:
     int("12.5")
-except ValueError as e:
-    print("ValueError:", e)      # as e 把异常对象接下来，print 出来就是报错信息
+except ValueError as me:
+    print("ValueError:", me)      # as e 把异常对象接下来，print 出来就是报错信息
 
 # TypeError：类型不对
 try:
@@ -57,6 +57,7 @@ except KeyError as e:
 # IndexError：列表越界
 try:
     nums = [1, 2, 3]
+    print(nums[-1])
     print(nums[10])
 except IndexError as e:
     print("IndexError:", e)
@@ -64,7 +65,7 @@ except IndexError as e:
 # ZeroDivisionError：除以 0
 try:
     print(10 / 0)
-except ZeroDivisionError as e:
+except Exception as e:
     print("ZeroDivisionError:", e)
 
 # FileNotFoundError：文件不存在（Day 10 见过）
@@ -85,10 +86,14 @@ def safe_div(a, b):
     except TypeError:
         print("参数得是数字")
         return None
+    except Exception as e:
+        print("unkownen exception", e)
+        
 
 print(safe_div(10, 2))
 print(safe_div(10, 0))
 print(safe_div(10, "x"))
+safe_div(10, 0.0)
 
 # 几种错处理方式一样的话，写成元组：
 try:
@@ -258,8 +263,17 @@ def get_number(prompt, low=0, high=100):
 # 用这个列表测试，把能转的都转出来：
 raw_data = ["12", "abc", "", "  34  ", "5.6", "-7", None, "0"]
 # 注意 None 会引发 TypeError 而不是 ValueError，两个都要接
-# TODO
 
+def safe_int(text, default=0):
+    try:
+        return int(str(text).strip())
+    except (TypeError, ValueError):
+        return default
+
+final_data = []
+for item in raw_data:
+    final_data.append(safe_int(item))
+print(final_data)
 
 # --- 第 2 题 ---
 # 把 Day 7 的 get_score() 用 try/except 重写一遍，要求：
@@ -268,16 +282,48 @@ raw_data = ["12", "abc", "", "  34  ", "5.6", "-7", None, "0"]
 #   拒绝 0-100 之外的数，并说清是为什么被拒
 #   用户按 Ctrl+C 时打印「已取消」而不是吐出一大堆红字
 # 提示：Ctrl+C 的异常叫 KeyboardInterrupt
-# TODO
 
+def get_score(subject):
+    while True:
+        try:
+            value = float(subject.strip())
+            if 0 <= value <= 100:
+                return value
+            else:
+                print("分数必须在 0 到 100 之间，原因：不在合法范围内")
+                return None
+        except ValueError:
+            print("输入不是数字，原因：不能转成 float")
+            return None
+        except KeyboardInterrupt:
+            print("已取消")
+            return None
+
+
+# 试一试：
+print(get_score(" 89.5 "))
+print(get_score(" 150 "))
+print(get_score("abc"))
 
 # --- 第 3 题 ---
 # 写一个函数 read_file_safe(path)：
 #   文件存在就返回内容，不存在就打印提示并返回空字符串
 # 分别用 data/notes.txt 和一个不存在的文件名测试
 # 想一想：这里用 try/except 好，还是用 Day 10 的 path.exists() 好？为什么？
-# TODO
 
+def read_file_safe(path):
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        print(f"文件不存在：{path}")
+        return ""
+
+
+print("--- 正常文件 ---")
+print(read_file_safe(DATA / "notes.txt")[:30])
+print("--- 不存在文件 ---")
+print(read_file_safe(DATA / "不存在的文件.txt"))
 
 # --- 第 4 题 ---
 # 下面是一批"脏"用户数据，有的缺键、有的类型不对
@@ -291,8 +337,23 @@ users = [
 # 请遍历输出「姓名 - 年龄」，缺失或非法的用默认值补上（姓名"未知"，年龄 0），
 # 并统计一共有几条数据有问题
 # 提示：缺键用 .get() 就够，不用 try；age 转数字才需要 try
-# TODO
+bad_count = 0
+for user in users:
+    name = user.get("name", "未知")
+    age_str = user.get("age")
 
+    try:
+        age = int(age_str)
+    except (TypeError, ValueError):
+        age = 0
+        bad_count += 1
+
+    if name == "未知" or age == 0:
+        bad_count += 1
+
+    print(f"{name} - {age}")
+
+print("有问题的数据条数：", bad_count)
 
 # --- 第 5 题 ---
 # 回到 Day 10 第 4 题的 data/scores.csv，这次用 try/except 重写解析：
@@ -302,7 +363,67 @@ users = [
 # 最后输出成功解析了几行、跳过了几行，以及各科平均分。
 #
 # 对比一下 Day 10 用 .isdigit() 的版本，哪个写起来更顺、更不容易漏情况？
-# TODO
+
+csv_path = DATA / "scores.csv"
+
+with open(csv_path, "r", encoding="utf-8") as f:
+    lines = f.readlines()
+
+valid_students = []
+skip_count = 0
+
+for line_no, raw_line in enumerate(lines[1:], start=2):
+    line = raw_line.strip()
+
+    if not line:
+        print(f"第 {line_no} 行为空行，已跳过")
+        skip_count += 1
+        continue
+
+    parts = [p.strip() for p in line.split(",")]
+    if len(parts) != 4:
+        print(f"第 {line_no} 行数据有问题，已跳过：字段数不对，实际 {len(parts)} 段")
+        skip_count += 1
+        continue
+
+    name, chinese, math, english = parts
+
+    try:
+        chinese_score = int(chinese)
+        math_score = int(math)
+        english_score = int(english)
+    except ValueError as e:
+        print(f"第 {line_no} 行数据有问题，已跳过：{e}")
+        skip_count += 1
+        continue
+
+    valid_students.append({
+        "name": name,
+        "chinese": chinese_score,
+        "math": math_score,
+        "english": english_score,
+    })
+
+print("=" * 30)
+print(f"成功解析 {len(valid_students)} 行，跳过 {skip_count} 行")
+print(f"{'姓名':<8}{'语文':>6}{'数学':>6}{'英语':>6}")
+print("-" * 30)
+for student in valid_students:
+    print(f"{student['name']:<8}{student['chinese']:>6}{student['math']:>6}{student['english']:>6}")
+
+if valid_students:
+    chinese_total = sum(s["chinese"] for s in valid_students)
+    math_total = sum(s["math"] for s in valid_students)
+    english_total = sum(s["english"] for s in valid_students)
+    count = len(valid_students)
+
+    print("-" * 30)
+    print(f"{'平均分':<8}{(chinese_total / count):>6.2f}{(math_total / count):>6.2f}{(english_total / count):>6.2f}")
+    print(f"语文平均分：{chinese_total / count:.2f}")
+    print(f"数学平均分：{math_total / count:.2f}")
+    print(f"英语平均分：{english_total / count:.2f}")
+else:
+    print("没有可用数据，无法计算平均分")
 
 
 # --- 第 6 题（挑战）---
@@ -322,8 +443,42 @@ test_lines = [
     "2026-08-14|整理房间||40",               # 没时间，这个应该算合法
 ]
 # 这题是 Day 12 和 Day 14 的直接铺垫，认真做
-# TODO
 
+def parse_event(line):
+    parts = line.split("|")
+    if len(parts) != 4:
+        raise ValueError("字段数不对，需要 4 段")
+
+    date, title, start_time, duration_text = parts
+
+    date_parts = date.split("-")
+    if len(date_parts) != 3:
+        raise ValueError("日期格式应为 YYYY-MM-DD")
+
+    try:
+        duration = int(duration_text.strip())
+    except ValueError:
+        raise ValueError("duration 必须是数字")
+
+    return {
+        "date": date,
+        "title": title,
+        "startTime": start_time,
+        "duration": duration,
+    }
+
+
+success_events = []
+for line in test_lines:
+    try:
+        event = parse_event(line)
+        success_events.append(event)
+        print("成功：", event)
+    except ValueError as e:
+        print(f"失败：{line} -> {e}")
+
+print("成功事件总数：", len(success_events))
+print("成功事件：", success_events)
 
 # ============================================================
 # 自检
