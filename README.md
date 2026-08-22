@@ -1,2 +1,2 @@
 # Study
-Study AI of myself
+Study AI by myself
