@@ -13,6 +13,7 @@ package.json，全是 JSON。今天只是学"在 Python 里怎么读写它"。
     存到什么程度？程序关了再开，数据一模一样。
 """
 
+import csv
 import json
 from pathlib import Path
 
@@ -221,7 +222,23 @@ print(load_json(demo_path))
 # 读 events.json，输出一份"日报"：
 #   总共几件事、已完成几件、未完成几件、完成率（百分比，保留 1 位小数）
 # 提示：完成率用 f"{已完成/总数:.1%}"
-# TODO
+with open(events_path, encoding="utf-8") as f:
+    events = json.load(f)
+
+total = len(events)
+done_count = 0
+for event in events:
+    if event.get("status") == "done":
+        done_count += 1
+
+pending_count = total - done_count
+rate = done_count / total if total else 0
+
+print("=== 日报 ===")
+print(f"总共 {total} 件事")
+print(f"已完成 {done_count} 件")
+print(f"未完成 {pending_count} 件")
+print(f"完成率：{rate:.1%}")
 
 
 # --- 第 2 题 ---
@@ -231,14 +248,45 @@ print(load_json(demo_path))
 #   sport  1 件   90 分钟
 #   life   1 件   40 分钟
 # 提示：分组用上面的 setdefault 套路
-# TODO
+by_type = {}
+for event in events:
+    kind = event.get("activityType", "unknown")
+    dur = event.get("duration", 0)
+    by_type.setdefault(kind, {"count": 0, "minutes": 0})
+    by_type[kind]["count"] += 1
+    by_type[kind]["minutes"] += dur
 
+sorted_types = sorted(
+    by_type.items(),
+    key=lambda item: item[1]["minutes"],
+    reverse=True,
+)
+
+
+print("=== 按活动类型统计 ===")
+for kind, info in sorted_types:
+    print(f"{kind:<6} {info['count']} 件  {info['minutes']} 分钟")
+
+print(json.dumps(by_type, ensure_ascii=False, indent=2))
 
 # --- 第 3 题 ---
 # 把所有 pending 的事项挑出来，存成一个新文件 pending.json
 # 存完再 load 回来，确认条数对得上（这一步是在验证"存得住"）
 # TODO
+pending_list = []
+for event in events:
+    if event.get("status") == "pending":
+        pending_list.append(event)
+print(pending_list)
 
+out_path = HERE / "pending.json"
+
+with open(out_path, "w", encoding="utf-8") as f:
+    json.dump(pending_list, f, ensure_ascii=False, indent=2)
+
+with open(out_path, encoding="utf-8") as f:
+    result = json.load(f) 
+print(result)
 
 # --- 第 4 题 ---
 # 给 events 加一条新事项（自己编一件今天真要做的事），
@@ -246,8 +294,37 @@ print(load_json(demo_path))
 # 加完存成 events_new.json，原文件不动。
 # 提示：id 现在是 "e1".."e6"，你可以数一下已有多少条然后 +1；
 #      想一想这个办法在"中间删过事项"之后还对吗？
-# TODO
+existing_ids = []
+for item in events:
+    event_id = item.get("id", "")
+    if event_id.startswith("e") and event_id[1:].isdigit():
+        existing_ids.append(int(event_id[1:]))
 
+next_num = max(existing_ids) + 1 if existing_ids else 1
+
+new_event = {
+    "id": f"e{next_num}",
+    "date": "2026-08-22",
+    "title": "复习 Python JSON",
+    "startTime": "20:00",
+    "duration": 45,
+    "description": "今天把 JSON 练习再过一遍",
+    "status": "pending",
+    "activityType": "study",
+}
+
+new_events = events + [new_event]
+new_path = HERE / "events_new.json"
+
+with open(new_path, "w", encoding="utf-8") as f:
+    json.dump(new_events, f, ensure_ascii=False, indent=2)
+
+print("=== 新增事项 ===")
+print(new_event)
+print(f"已写入 {new_path.name}，总条数：{len(new_events)}")
+
+# 说明：如果只用 len(events) + 1，这种办法在中间删过数据时可能重复；
+# 更稳的方式是看所有 id 的最大值，再 +1。这样更不会冲突。
 
 # --- 第 5 题 ---
 # 写一个函数 find_events(events, keyword)：
@@ -255,8 +332,25 @@ print(load_json(demo_path))
 #   要求不区分大小写（搜 "python" 能找到 "学 Python"）
 # 用 "python"、"作业"、"xyz" 分别测试
 # 提示：keyword.lower() in title.lower()
-# TODO
+def find_events(events, keyword):
+    keyword = keyword.lower()
+    result = []
 
+    for event in events:
+        title = str(event.get("title", "")).lower()
+        description = str(event.get("description", "")).lower()
+        if keyword in title or keyword in description:
+            result.append(event)
+
+    return result
+
+
+for word in ["pythoN", "作业", "xyz"]:
+    found = find_events(events, word)
+    print(f"\n关键词：{word}")
+    print(f"找到 {len(found)} 条：")
+    for item in found:
+        print(f"- {item['title']} ({item['status']})")
 
 # --- 第 6 题 ---
 # 把 Day 7 的成绩统计器数据改成 JSON 存储：
@@ -264,10 +358,37 @@ print(load_json(demo_path))
 #   下次运行先 load_json 读回来，能看到上次录的人，然后继续加
 #   删掉 grades.json 再运行，程序应该正常启动（空列表开始），不能崩
 # 直接用上面写好的 load_json / save_json
-#
-# 这题做完，你就完成了 Day 14 项目的核心机制。
-# TODO
+grades_path = HERE / "grades.json"
 
+# 先读历史数据：如果文件不存在，默认空列表
+students = load_json(grades_path, default=[])
+
+print("=== 目前已有成绩 ===")
+if students:
+    for s in students:
+        print(s)
+else:
+    print("还没有数据，空列表开始")
+
+# 继续加一名新学生
+new_student = {
+    "name": "小王",
+    "chinese": 92,
+    "math": 88,
+    "english": 90,
+}
+students.append(new_student)
+
+# 保存到 grades.json
+save_json(students, grades_path)
+print("\n已保存：")
+print(load_json(grades_path))
+
+# 这题做完，你就完成了 Day 14 项目的核心机制。
+# 关键点：
+#   - 默认值很重要，文件不存在时不要崩
+#   - load_json 负责读，save_json 负责写
+#   - 每一次运行都可以从文件继续读，提高程序的持久化能力
 
 # --- 第 7 题（挑战）---
 # 写一个函数 to_csv(events, path)，把 events 导出成 CSV 文件：
@@ -276,7 +397,69 @@ print(load_json(demo_path))
 # 然后写配套的 from_csv(path)，读回来变成列表套字典（duration 要转回 int）
 # 用 to_csv 存了再 from_csv 读，对比一下和原来的 events 差在哪
 # 提示：想一想如果 title 里本身有逗号会发生什么？（这就是 csv 模块存在的理由）
-# TODO
+
+def to_csv(events, path):
+    """把 events 导出成 CSV，保留需要的 5 个字段。"""
+    path = Path(path)
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["date", "title", "startTime", "duration", "status"])
+
+        for item in events:
+            writer.writerow([
+                item.get("date", ""),
+                item.get("title", ""),
+                item.get("startTime", ""),
+                item.get("duration", 0),
+                item.get("status", ""),
+            ])
+
+
+def from_csv(path):
+    """把 CSV 读回来，返回列表套字典。duration 需要转回 int。"""
+    path = Path(path)
+    rows = []
+
+    with open(path, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            rows.append({
+                "date": row.get("date", ""),
+                "title": row.get("title", ""),
+                "startTime": row.get("startTime", ""),
+                "duration": int(row.get("duration", 0) or 0),
+                "status": row.get("status", ""),
+            })
+
+    return rows
+
+
+csv_path = HERE / "events_export.csv"
+to_csv(events, csv_path)
+round_trip = from_csv(csv_path)
+
+print("\n=== CSV 导出与读取 ===")
+print(f"原始条数：{len(events)}，读回条数：{len(round_trip)}")
+print("第一条原始：", events[0])
+print("第一条读取：", round_trip[0])
+
+# 对比：CSV 只能存我们指定的 5 个字段；原始 events 还有 id、description、activityType 等。
+# 所以“读回来”不是完全等于原始对象，而是“拆成更简单的表格结构”。
+print("\n对比差异：")
+for i, (old, new) in enumerate(zip(events, round_trip)):
+    old_simple = {
+        "date": old.get("date", ""),
+        "title": old.get("title", ""),
+        "startTime": old.get("startTime", ""),
+        "duration": old.get("duration", 0),
+        "status": old.get("status", ""),
+    }
+    if old_simple != new:
+        print(f"第 {i + 1} 条有差异：")
+        print("原始：", old_simple)
+        print("CSV ：", new)
+
+print("\n说明：如果 title 里本身有逗号，比如 '学, Python'，csv.writer 会自动给它加双引号，避免把它拆成两列。")
 
 
 # --- 第 8 题（挑战，跟你的项目连起来）---
@@ -286,7 +469,83 @@ print(load_json(demo_path))
 #
 # 这题没有标准答案，重点是体会「设计数据结构」这件事 ——
 # 你在 calendar-app 里是指挥 AI 做的，这次自己设计一遍。
-# TODO
+
+# 一个简单而合理的设计：
+# - 事件本身有 title, startTime, duration, status
+# - recurrence 里写重复规则：每周一、三、五 16:00
+# - reminders 里写提醒列表：提前 10 分钟提醒
+# - 用 JSON 保存到 recurring.json
+# - 读出来以后，可以用中文把它“翻译”成一句自然语言
+
+recurring_event = {
+    "id": "r1",
+    "title": "写作业",
+    "date": "2026-08-24",
+    "startTime": "16:00",
+    "duration": 90,
+    "status": "pending",
+    "activityType": "study",
+    "recurrence": {
+        "type": "weekly",
+        "days": ["Mon", "Wed", "Fri"],
+        "time": "16:00",
+        "count": 0,
+        "until": ""
+    },
+    "reminders": [
+        {
+            "type": "minutes_before",
+            "value": 10,
+            "message": "记得写作业"
+        }
+    ]
+}
+
+recurring_path = HERE / "recurring.json"
+save_json(recurring_event, recurring_path)
+print("\n=== recurring.json ===")
+print(load_json(recurring_path))
+
+
+def describe_recurring(event):
+    """把重复事件读出来，用中文描述一遍。"""
+    title = event.get("title", "事项")
+    start_time = event.get("startTime", "")
+    duration = event.get("duration", 0)
+    recurrence = event.get("recurrence", {})
+    reminders = event.get("reminders", [])
+
+    days = recurrence.get("days", [])
+    day_text = "、".join({
+        "Mon": "周一",
+        "Tue": "周二",
+        "Wed": "周三",
+        "Thu": "周四",
+        "Fri": "周五",
+        "Sat": "周六",
+        "Sun": "周日"
+    }.get(day, day) for day in days)
+
+    if not day_text:
+        day_text = "每天"
+
+    reminder_text = ""
+    if reminders:
+        first = reminders[0]
+        value = first.get("value", 0)
+        reminder_text = f"，提前 {value} 分钟提醒"
+
+    return f"{title}：每周{day_text} {start_time} 开始，持续 {duration} 分钟{reminder_text}。"
+
+
+print("\n=== 读出来的中文描述 ===")
+print(describe_recurring(load_json(recurring_path)))
+
+# 这个结构的好处：
+# - recurrence 把“重复多久/重复哪几天”单独存起来
+# - reminders 把“提醒提前多久”单独存起来
+# - 以后如果要做“生成下一次事件”或“展示提醒列表”，都很方便
+# - 这也是 calendar-app 里真实会遇到的设计思路：把规则和提醒拆成独立字段
 
 
 # ============================================================
