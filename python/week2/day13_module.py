@@ -217,6 +217,30 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 # 提示：math.log2(100) ≈ 6.6，所以 7 次是"二分法刚好够"，这个游戏是有解的
 # TODO
 
+# import random
+
+# secret = random.randint(1, 100)
+# max_guesses = 7
+
+# print("我想好了一个 1 到 100 的数字，你有 7 次机会")
+
+# for times in range(1, max_guesses + 1):
+#     guess = int(input("第 {} 次猜：".format(times)))
+
+#     if guess == secret:
+#         print("猜中了！")
+#         print("你用了 {} 次".format(times))
+#         break
+#     elif guess < secret:
+#         print("小了")
+#     else:
+#         print("大了")
+
+#     left = max_guesses - times
+#     print("还剩 {} 次".format(left))
+# else:
+#     print("次数用完了！")
+#     print("正确答案是：", secret)
 
 # --- 第 2 题 ---
 # 用 random.sample 写一个双色球选号：
@@ -224,14 +248,44 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 # 输出格式：红球 03 07 12 19 25 31 | 蓝球 08
 # 提示：数字补零用 f"{n:02d}"
 # TODO
+import random
 
+red = random.sample(range(1, 34), 6)
+red.sort()
+
+blue = random.randint(1, 16)
+
+print("红球", end=" ")
+for n in red:
+    print(f"{n:02d}", end=" ")
+print("|", end=" ")
+
+print("蓝球", f"{blue:02d}")
 
 # --- 第 3 题 ---
 # 用 Counter 重写 Day 8 第 3 题的词频统计，读 data/article.txt，输出出现最多的 5 个词。
 # 然后跟你 Day 8 手写的版本对比一下：代码少了多少行？
 # 提示：读文件要用 Day 10 的 Path(__file__).parent
 # TODO
+from collections import Counter
+from pathlib import Path
 
+HERE = Path(__file__).parent
+path = HERE / "data" / "article.txt"
+
+with open(path, "r", encoding="utf-8") as f:
+    text = f.read().lower()
+
+words = text.split()
+
+counts = Counter(words)
+
+top5 = counts.most_common(5)
+
+print("出现最多的 5 个词：")
+for word, times in top5:
+    print(word, times)
+    
 
 # --- 第 4 题（今天最重要的一题）---
 # 建一个你自己的模块 week2/mytools.py，把这个月写过的好东西都收进去：
@@ -255,6 +309,14 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 # Day 14 通讯录、Day 20 待办工具都会 import 它。
 # TODO
 
+import mytools
+
+print("\n--- mytools 自测 ---")
+print(mytools.safe_int(" 42 ", default=0))
+print(mytools.average([90, 80, 100]))
+print(mytools.grade(85))
+print(mytools.mask_phone("13800138000"))
+
 
 # --- 第 5 题 ---
 # 在终端里把虚拟环境建起来，装上 requests，然后回到这个文件里写：
@@ -263,6 +325,12 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 # 提示：ModuleNotFoundError 是 ImportError 的子类
 # 这题的意义：你会亲手体会一次"装了但 VS Code 找不到"，以后能自己排查
 # TODO
+
+try:
+    import requests
+    print("requests 版本：", requests.__version__)
+except ModuleNotFoundError:
+    print("还没装 requests，先激活 .venv 再 pip install requests")
 
 
 # --- 第 6 题（挑战）---
@@ -273,6 +341,21 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 # 顺便注意一件事：改完 textstats.py 之后，这个文件要重新运行才会用到新版本。
 # Python 的 import 在一次运行里只加载一遍。
 # TODO
+def longest_words(text, n=3):
+    """返回最长的 n 个不重复单词。"""
+    words = word_list(text, skip_stop_words=True)
+
+    unique_words = []
+    for word in words:
+        if word not in unique_words:
+            unique_words.append(word)
+
+    unique_words.sort(key=len, reverse=True)
+    return unique_words[:n]
+import textstats
+
+demo = "Python is powerful and Python is fast. It plays well with others."
+print(textstats.longest_words(demo, 3))
 
 
 # --- 第 7 题（挑战）---
@@ -284,6 +367,18 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 #
 # 这题练的不是语法，是"查官方文档"这个能力 —— 比查菜鸟教程更值得练。
 # TODO
+from pathlib import Path
+
+# 1. 一次建多层目录
+Path("a/b/c").mkdir(parents=True, exist_ok=True)
+
+# 2. 直接读取文件内容
+text = Path("demo.txt").read_text(encoding="utf-8")
+print(text)
+
+# 3. 查看路径组成
+p = Path("/Users/tian/Downloads/Study/python/week2/textstats.py")
+print(p.parts)
 
 
 # ============================================================
