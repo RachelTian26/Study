@@ -1,5 +1,5 @@
 """
-Day 6 (08-06)  函数 def
+第 6 课 (08-06)  函数 def
 
 今天的目标：会写默认参数、返回多个值，知道什么时候该抽成函数。
 教程：https://liaoxuefeng.com/books/python/function/index.html
@@ -117,7 +117,7 @@ for person in group:
 
 # --- 第 3 题 ---
 # 写一个函数 count_words(text)，统计每个单词出现次数，返回字典
-# （就是 Day 5 第 3 题，这次包成函数）
+# （就是 第 5 课第 3 题，这次包成函数）
 # 然后调用它测试两个不同的句子——体会一下包成函数后复用有多方便
 # TODO
 def count_words(text):
@@ -173,14 +173,14 @@ print(fizzbuzz(n))
 
 
 # --- 第 6 题（挑战）---
-# 把 Day 5 第 6 题的通讯录重写一遍，这次要求：
+# 把 第 5 课第 6 题的通讯录重写一遍，这次要求：
 #   add_contact(book, name, phone)     添加
 #   find_contact(book, name)           查询，找不到返回 None
 #   delete_contact(book, name)         删除，返回是否删成功
 #   show_all(book)                     打印全部
 #   main()                             菜单循环
 # 主程序里只调用这些函数，不写具体逻辑
-# 这就是"函数式拆分"，Day 14 的项目会直接用上
+# 这就是"函数式拆分"，第 14 课的项目会直接用上
 # TODO
 def add_contact(book, name, phone):
     book[name] = phone

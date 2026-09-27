@@ -1,5 +1,5 @@
 """
-Day 3 (08-03)  循环 for · while · range
+第 3 课 (08-03)  循环 for · while · range
 
 今天的目标：会用 break / continue，能写嵌套循环。
 教程：https://liaoxuefeng.com/books/python/basic/loop/index.html

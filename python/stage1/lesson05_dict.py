@@ -1,5 +1,5 @@
 """
-Day 5 (08-05)  字典 dict · 集合 set
+第 5 课 (08-05)  字典 dict · 集合 set
 
 今天的目标：会遍历 .items()，说清 .get() 和 [] 的区别。
 教程：https://liaoxuefeng.com/books/python/basic/dict-set/index.html
@@ -179,7 +179,7 @@ print (len(different_people))
 #   用字典存 {名字: 电话}
 #   写一个 while 循环菜单：1-添加 2-查询 3-删除 4-显示全部 5-退出
 #   查询不到要友好提示，不要让程序崩
-# 提示：这题是 Day 14 项目的预演，认真做
+# 提示：这题是 第 14 课项目的预演，认真做
 # TODO
 contacts = []
 contact = {"name": "Rachel", "phone": "13800138000"}

@@ -1,5 +1,5 @@
 """
-Day 4 (08-04)  列表 list
+第 4 课 (08-04)  列表 list
 
 今天的目标：增删改查 + 切片 + 遍历，全部不用查。
 教程：https://liaoxuefeng.com/books/python/basic/list-tuple/index.html

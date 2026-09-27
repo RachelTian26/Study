@@ -1,5 +1,5 @@
 """
-Day 2 (08-02)  输入 · 运算 · 条件判断
+第 2 课 (08-02)  输入 · 运算 · 条件判断
 
 今天的目标：if/elif/else 写熟，牢记 input() 拿到的永远是字符串。
 教程：https://liaoxuefeng.com/books/python/basic/branch/index.html

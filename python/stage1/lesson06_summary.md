@@ -1,4 +1,4 @@
-# Day 6 学习总结
+# 第 6 课学习总结
 
 ## 学习目标与真正学会的内容
 
@@ -18,7 +18,7 @@
 | --- |
 | 用 `is_even(n)` 判断偶数，复用函数逻辑。 |
 | 写 `bmi(weight, height)` 返回 BMI 和评价，并测试多个人的数据。 |
-| 把 Day 5 的单词统计逻辑包装成 `count_words(text)` 函数。 |
+| 把 第 5 课的单词统计逻辑包装成 `count_words(text)` 函数。 |
 | 写 `grade(score)` 判断分数等级，并处理无效分数。 |
 | 实现 `fizzbuzz(n)`，练习条件判断和取余运算。 |
 | 用 `add_contact`、`find_contact`、`delete_contact`、`show_all` 拆分通讯录功能。 |

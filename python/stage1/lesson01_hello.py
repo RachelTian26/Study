@@ -1,5 +1,5 @@
 """
-Day 1 (08-01)  变量 · 数据类型 · 输出
+第 1 课 (08-01)  变量 · 数据类型 · 输出
 
 今天的目标：会用 f-string 输出，搞清楚 int / float / str / bool 的区别和转换。
 教程：https://liaoxuefeng.com/books/python/basic/io/index.html
