@@ -1,5 +1,5 @@
 """
-Day 12 (08-12)  JSON 读写
+第 12 课 (08-12)  JSON 读写
 
 今天的目标：Python dict ↔ JSON 文件自由互转。
 教程：https://liaoxuefeng.com/books/python/function/pickling/index.html
@@ -8,7 +8,7 @@ JSON 你比大多数初学者熟得多 —— calendar-app 的接口、方舟 AP
 package.json，全是 JSON。今天只是学"在 Python 里怎么读写它"。
 
 一句话总结今天：
-    Day 10 你能把字符串存进文件，
+    第 10 课你能把字符串存进文件，
     今天你能把**整个字典和列表**存进文件，读回来还是字典和列表。
     存到什么程度？程序关了再开，数据一模一样。
 """
@@ -74,7 +74,7 @@ try:
 except json.JSONDecodeError as e:
     print("JSON 解析失败：", e)
 # ↑ 这个错你以后会经常遇到，尤其是拿到 AI 返回的"看起来像 JSON"的东西时。
-#   Day 19 调方舟 API 就会碰上：模型有时会在 JSON 外面套一层 ```json 代码块。
+#   第 19 课调方舟 API 就会碰上：模型有时会在 JSON 外面套一层 ```json 代码块。
 
 
 # --- Python 和 JSON 的类型对照 ---
@@ -113,7 +113,7 @@ with open(events_path, encoding="utf-8") as f:
 print(f"读到 {len(events)} 条事项")
 print(type(events), type(events[0]))       # list, dict
 
-# 读出来就是普通的列表套字典，Day 4/5 学的全都能用：
+# 读出来就是普通的列表套字典，第 4 课/5 学的全都能用：
 for e in events:
     mark = "✓" if e["status"] == "done" else "○"
     print(f"{mark} {e['date']} {e['startTime'] or '(未定)':>5}  {e['title']}")
@@ -155,13 +155,13 @@ with open(out_path, "w", encoding="utf-8") as f:
 
 print(f"\n已写入 {out_path.name}，打开看看格式")
 
-# 存 JSON 的标准写法，记住它，Day 14 和 Day 20 都要用：
+# 存 JSON 的标准写法，记住它，第 14 课和 第 20 课都要用：
 #     with open(path, "w", encoding="utf-8") as f:
 #         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
 # --- 封装成两个函数（这是今天最该带走的东西）---
-# Day 14 的通讯录、Day 20 的待办工具，都会直接用这两个函数。
+# 第 14 课的通讯录、第 20 课的待办工具，都会直接用这两个函数。
 
 def load_json(path, default=None):
     """
@@ -209,7 +209,7 @@ def save_json_safe(data, path):
 
 save_json_safe({"safe": True}, demo_path)
 print(load_json(demo_path))
-# 今天不要求你写这个，但 Day 14 存通讯录时可以用上，你的数据会更靠得住。
+# 今天不要求你写这个，但 第 14 课存通讯录时可以用上，你的数据会更靠得住。
 
 
 # ============================================================
@@ -353,7 +353,7 @@ for word in ["pythoN", "作业", "xyz"]:
         print(f"- {item['title']} ({item['status']})")
 
 # --- 第 6 题 ---
-# 把 Day 7 的成绩统计器数据改成 JSON 存储：
+# 把 第 7 课的成绩统计器数据改成 JSON 存储：
 #   录入完存进 grades.json
 #   下次运行先 load_json 读回来，能看到上次录的人，然后继续加
 #   删掉 grades.json 再运行，程序应该正常启动（空列表开始），不能崩
@@ -384,7 +384,7 @@ save_json(students, grades_path)
 print("\n已保存：")
 print(load_json(grades_path))
 
-# 这题做完，你就完成了 Day 14 项目的核心机制。
+# 这题做完，你就完成了 第 14 课项目的核心机制。
 # 关键点：
 #   - 默认值很重要，文件不存在时不要崩
 #   - load_json 负责读，save_json 负责写
@@ -563,5 +563,5 @@ print(describe_recurring(load_json(recurring_path)))
 # 收尾
 # ============================================================
 # 今天开始，"数据存得住"这件事你已经会了。
-# Day 14 的通讯录、Day 20 的待办工具，存储部分就是今天这两个函数。
-# 建议把 load_json / save_json 抄进 Day 13 你自己的 mytools.py 里，之后随时 import。
+# 第 14 课的通讯录、第 20 课的待办工具，存储部分就是今天这两个函数。
+# 建议把 load_json / save_json 抄进 第 13 课你自己的 mytools.py 里，之后随时 import。

@@ -1,5 +1,5 @@
 """
-Day 11 (08-11)  异常处理 try / except
+第 11 课 (08-11)  异常处理 try / except
 
 今天的目标：会写 try/except，知道该捕获什么、更重要的是知道不该捕获什么。
 教程：https://liaoxuefeng.com/books/python/function/error/index.html
@@ -33,7 +33,7 @@ print("程序还活着 ←重点在这")
 # 有了 try，报错被接住，程序继续往下走。
 
 
-# --- 认识常见的几种错，第 1 周你应该都见过 ---
+# --- 认识常见的几种错，第 1 阶段你应该都见过 ---
 
 # ValueError：类型对但值不对
 try:
@@ -43,11 +43,11 @@ except ValueError as me:
 
 # TypeError：类型不对
 try:
-    print("我今年" + 15 + "岁")   # Day 1 第 5 题那个错
+    print("我今年" + 15 + "岁")   # 第 1 课第 5 题那个错
 except TypeError as e:
     print("TypeError:", e)
 
-# KeyError：字典没这个键（Day 5 见过）
+# KeyError：字典没这个键（第 5 课见过）
 try:
     student = {"name": "小明"}
     print(student["phone"])
@@ -68,7 +68,7 @@ try:
 except Exception as e:
     print("ZeroDivisionError:", e)
 
-# FileNotFoundError：文件不存在（Day 10 见过）
+# FileNotFoundError：文件不存在（第 10 课见过）
 try:
     with open(DATA / "不存在.txt", encoding="utf-8") as f:
         f.read()
@@ -218,9 +218,9 @@ d = {"a": 1}
 print(d.get("b", "默认值"))         # 这种场合用 .get() 就好，别写 try
 
 
-# --- 今天最实用的一段：把 Day 7 的 get_score 升级 ---
+# --- 今天最实用的一段：把 第 7 课的 get_score 升级 ---
 #
-# Day 7 你是这么写的：
+# 第 7 课你是这么写的：
 #     if score.isdigit() and 0 <= int(score) <= 100:
 #
 # .isdigit() 的问题：
@@ -276,7 +276,7 @@ for item in raw_data:
 print(final_data)
 
 # --- 第 2 题 ---
-# 把 Day 7 的 get_score() 用 try/except 重写一遍，要求：
+# 把 第 7 课的 get_score() 用 try/except 重写一遍，要求：
 #   接受小数（89.5 是合法分数）
 #   接受前后有空格的输入
 #   拒绝 0-100 之外的数，并说清是为什么被拒
@@ -309,7 +309,7 @@ print(get_score("abc"))
 # 写一个函数 read_file_safe(path)：
 #   文件存在就返回内容，不存在就打印提示并返回空字符串
 # 分别用 data/notes.txt 和一个不存在的文件名测试
-# 想一想：这里用 try/except 好，还是用 Day 10 的 path.exists() 好？为什么？
+# 想一想：这里用 try/except 好，还是用 第 10 课的 path.exists() 好？为什么？
 
 def read_file_safe(path):
     try:
@@ -356,13 +356,13 @@ for user in users:
 print("有问题的数据条数：", bad_count)
 
 # --- 第 5 题 ---
-# 回到 Day 10 第 4 题的 data/scores.csv，这次用 try/except 重写解析：
+# 回到 第 10 课第 4 题的 data/scores.csv，这次用 try/except 重写解析：
 #   "小美" 那行的 abc     → 接住 ValueError，跳过并说明原因
 #   "小强" 那行只有 3 段  → 接住 IndexError（或先判断长度），跳过并说明原因
 #   空行                  → 跳过
 # 最后输出成功解析了几行、跳过了几行，以及各科平均分。
 #
-# 对比一下 Day 10 用 .isdigit() 的版本，哪个写起来更顺、更不容易漏情况？
+# 对比一下 第 10 课用 .isdigit() 的版本，哪个写起来更顺、更不容易漏情况？
 
 csv_path = DATA / "scores.csv"
 
@@ -442,7 +442,7 @@ test_lines = [
     "2026/08/13|物理实验|14:00|120",         # 日期分隔符不对
     "2026-08-14|整理房间||40",               # 没时间，这个应该算合法
 ]
-# 这题是 Day 12 和 Day 14 的直接铺垫，认真做
+# 这题是 第 12 课和 第 14 课的直接铺垫，认真做
 
 def parse_event(line):
     parts = line.split("|")

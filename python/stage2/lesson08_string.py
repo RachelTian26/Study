@@ -1,14 +1,14 @@
 """
-Day 8 (08-08)  字符串处理 · 格式化
+第 8 课 (08-08)  字符串处理 · 格式化
 
 今天的目标：split / join / strip / replace 用熟，f-string 的对齐和数字格式会查会用。
 教程：https://liaoxuefeng.com/books/python/basic/str/index.html
 
-为什么第 2 周从字符串开始：
+为什么第 2 阶段从字符串开始：
     因为从明天起你要读文件、解析 JSON、处理用户输入 —— 拿到手的全是字符串。
     "把一坨字符串切成有用的数据"，这是后面每一天的地基。
 
-第 1 周你已经用过 .split() 和 .isdigit()，今天把这一族方法补全。
+第 1 阶段你已经用过 .split() 和 .isdigit()，今天把这一族方法补全。
 """
 
 # ============================================================
@@ -37,7 +37,7 @@ print(name)                  # 还是 "  Rachel  "
 cleaned = name.strip()       # 要这样接住
 print(f"[{cleaned}]")        # [Rachel]
 
-# 对比一下 Day 4 的列表：
+# 对比一下 第 4 课的列表：
 #     list.append() / list.sort()  → 直接改原列表，不返回
 #     str.strip() / str.replace()  → 返回新的，原来的不变
 # 这个区别很容易踩，记住"字符串方法必须接返回值"。
@@ -82,7 +82,7 @@ print(answer.lower() == "yes")           # 用户输 Yes/YES/yes 都算对
 text = "今天要写数学作业"
 print("数学" in text)                    # True    最常用，判断包含就用 in
 print(text.find("数学"))                 # 4       找不到返回 -1
-print(text.index("数学"))                # 4       找不到直接报错（Day 11 会用上这个区别）
+print(text.index("数学"))                # 4       找不到直接报错（第 11 课会用上这个区别）
 print(text.count("作"))                  # 1
 print("day8.py".startswith("day"))       # True
 print("day8.py".endswith(".py"))         # True
@@ -93,12 +93,12 @@ print("12.5".isdigit())       # False  ← 小数点不算数字！
 print("-3".isdigit())         # False  ← 负号也不算！
 print("abc".isalpha())        # True
 print("   ".isspace())        # True
-# Day 7 你用 .isdigit() 检查分数，它挡不住 "12.5" 和 "-3"。
-# Day 11 学了 try/except 就有更好的办法了，今天先知道它的边界在哪。
+# 第 7 课你用 .isdigit() 检查分数，它挡不住 "12.5" 和 "-3"。
+# 第 11 课学了 try/except 就有更好的办法了，今天先知道它的边界在哪。
 
 
 # --- f-string 进阶：对齐和数字格式 ---
-# Day 7 你已经用过 :>5 和 :.1f，把这一族补齐
+# 第 7 课你已经用过 :>5 和 :.1f，把这一族补齐
 
 print(f"[{'左':<8}]")         # 左对齐占 8 格
 print(f"[{'右':>8}]")         # 右对齐
@@ -120,7 +120,7 @@ x = 42
 print(f"{x = }")              # x = 42
 print(f"{x * 2 = }")          # x * 2 = 84
 
-# ⚠️ 中文对齐的坑（Day 7 你的成绩表就歪了）
+# ⚠️ 中文对齐的坑（第 7 课你的成绩表就歪了）
 # 终端里一个中文字占两格宽，但 Python 数的是"字符个数"，不是"显示宽度"
 print(f"|{'姓名':<6}|{'分数':>6}|")
 print(f"|{'小明':<6}|{'90':>6}|")
@@ -207,7 +207,7 @@ print(cleaned_names)
 # --- 第 3 题 ---
 # 用「读一读」里的 menu 三引号字符串，或自己写一段英文文本，统计：
 #   一共多少个单词、多少个不重复的单词、出现最多的单词是哪个
-# 提示：单词统计的逻辑 Day 5/6 写过（用 .get(词, 0) + 1），这次先 .lower() 再统计
+# 提示：单词统计的逻辑 第 5 课/6 写过（用 .get(词, 0) + 1），这次先 .lower() 再统计
 #      找"出现最多的"可以先假设第一个最多，再遍历比较
 text = "Hello hello world hello Python is fun and fun is great"
 words = text.lower().split()

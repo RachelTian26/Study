@@ -1,5 +1,5 @@
 """
-Day 10 (08-10)  文件读写
+第 10 课 (08-10)  文件读写
 
 今天的目标：会用 with open()，说清 r / w / a 的区别，知道路径为什么会找不到。
 教程：https://liaoxuefeng.com/books/python/function/io/index.html
@@ -21,7 +21,7 @@ from pathlib import Path
 #
 # 坑在这：open("data/notes.txt") 里的路径，不是相对于这个 .py 文件，
 # 而是相对于"你运行命令时所在的目录"（叫工作目录 / cwd）。
-# 你在 VS Code 里点运行，cwd 可能是 python/，也可能是 python/week2/，不一定。
+# 你在 VS Code 里点运行，cwd 可能是 python/，也可能是 python/stage2/，不一定。
 #
 # 所以专业做法是：以"这个文件自己的位置"为基准算路径。
 
@@ -33,7 +33,7 @@ print("数据文件夹：", DATA)
 print("文件夹存在吗：", DATA.exists())
 
 # 记住这三行，后面每次读写文件都照抄。
-# 你会在 Day 12、Day 14 反复用到它。
+# 你会在 第 12 课、第 14 课反复用到它。
 
 
 # --- 读整个文件 ---
@@ -118,7 +118,7 @@ with open(log_path, encoding="utf-8") as f:
 
 
 # --- 文件存在吗？ ---
-# 直接读不存在的文件会崩，读之前先判断（Day 11 会学更好的办法：try/except）
+# 直接读不存在的文件会崩，读之前先判断（第 11 课会学更好的办法：try/except）
 missing = DATA / "不存在的文件.txt"
 if missing.exists():
     print("有这个文件")
@@ -138,7 +138,7 @@ for p in DATA.glob("*.txt"):
 
 # --- 真实场景：读 CSV 并解析 ---
 # data/scores.csv 是一份"脏"数据，故意留了空行、多余空格、缺列、非数字
-# 今天先用最朴素的办法读，Day 11 学了异常处理再来收拾这些坑
+# 今天先用最朴素的办法读，第 11 课学了异常处理再来收拾这些坑
 
 csv_path = DATA / "scores.csv"
 
@@ -231,12 +231,12 @@ print(f"已写入 {numbered_path.name}")
 # --- 第 4 题 ---
 # 读 data/scores.csv，只处理"格式完整且三科都是数字"的行，
 # 把其他行跳过并打印一句「第 N 行数据有问题，已跳过」。
-# 然后输出一张成绩表（可以直接搬 Day 7 的 print_table 思路），
+# 然后输出一张成绩表（可以直接搬 第 7 课的 print_table 思路），
 # 并算出各科平均分。
 #
-# 这题是 Day 7 那个你没写完的 print_summary 的第二次机会 ——
+# 这题是 第 7 课那个你没写完的 print_summary 的第二次机会 ——
 # 这次数据来自文件，不用手输了。
-# 提示：判断"是不是数字"先用 .isdigit()，Day 11 会有更好的写法
+# 提示：判断"是不是数字"先用 .isdigit()，第 11 课会有更好的写法
 with open(csv_path, "r", encoding="utf-8") as f:
     lines = f.readlines()
 
@@ -307,7 +307,7 @@ print(f"已记录：第 {count} 次运行")
 # 提示：统计还是 .get(词, 0) + 1；排序可以用
 #       sorted(counts.items(), key=lambda kv: kv[1], reverse=True)
 #       lambda 是"一次性小函数"，key= 告诉 sorted 按什么排。
-#       看不懂就先照抄，Day 13 之后再回来理解
+#       看不懂就先照抄，第 13 课之后再回来理解
 
 def word_count(path, top_n=5):
     with open(path, "r", encoding="utf-8") as f:
@@ -329,10 +329,10 @@ def word_count(path, top_n=5):
 print(word_count(article_path, 5))
 
 # --- 第 7 题（挑战）---
-# 把 Day 7 的成绩统计器改造一下：录入完成后，把成绩表存进 grades.txt，
+# 把 第 7 课的成绩统计器改造一下：录入完成后，把成绩表存进 grades.txt，
 # 下次运行时先读这个文件，把之前录的人显示出来，然后可以继续加人。
 #
-# 这就是 Day 14 通讯录项目的雏形，只是那时候会用 JSON 存。
+# 这就是 第 14 课通讯录项目的雏形，只是那时候会用 JSON 存。
 # 提示：存的时候一行一个学生，用 | 或 , 分隔；读的时候 split 回来
 # TODO
 
@@ -351,5 +351,5 @@ print(word_count(article_path, 5))
 # ============================================================
 # 收尾
 # ============================================================
-# 这个文件跑完会在 week2/ 里生成 output.txt、log.txt 和你练习产出的文件。
-# 都是练习产物，不用管，也不用提交到 git（week2/.gitignore 已经帮你排除了）。
+# 这个文件跑完会在 stage2/ 里生成 output.txt、log.txt 和你练习产出的文件。
+# 都是练习产物，不用管，也不用提交到 git（stage2/.gitignore 已经帮你排除了）。

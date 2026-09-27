@@ -1,5 +1,5 @@
 """
-Day 13 (08-13)  模块导入 · venv · pip
+第 13 课 (08-13)  模块导入 · venv · pip
 
 今天的目标：能建虚拟环境、装包、写自己的模块并 import。
 教程：https://liaoxuefeng.com/books/python/function/modules/index.html
@@ -16,7 +16,7 @@ Day 13 (08-13)  模块导入 · venv · pip
     module.exports              →   不需要，文件里的东西默认就能被 import
 
 唯一一个 Python 独有、必须搞懂的东西是 `if __name__ == "__main__"`。
-Day 7 你照抄过它，今天把它彻底弄明白。
+第 7 课你照抄过它，今天把它彻底弄明白。
 """
 
 # ============================================================
@@ -72,11 +72,11 @@ print(math.pi, math.sqrt(2), math.ceil(3.2), math.floor(3.8))
 # 注意 round() 是内置的，不用 import。而且它是"四舍六入五取偶"：
 print(round(2.5), round(3.5))       # 2 4  ← 不是你以为的 3 4，别惊讶
 
-# --- datetime 时间（Day 17 会细讲，今天先用起来）---
+# --- datetime 时间（第 17 课会细讲，今天先用起来）---
 now = datetime.now()
 print(now.strftime("%Y-%m-%d %H:%M:%S"))         # 格式化成字符串
 print(now.isoformat())                            # 2026-08-13T10:30:00.123456
-# 存进 JSON 就用 .isoformat() 或 .strftime()，Day 12 讲过 datetime 不能直接 dump
+# 存进 JSON 就用 .isoformat() 或 .strftime()，第 12 课讲过 datetime 不能直接 dump
 
 # --- os / sys 系统相关 ---
 import os
@@ -88,7 +88,7 @@ print("这个文件的路径：", __file__)
 # --- collections：更好用的容器 ---
 from collections import Counter
 
-# 还记得 Day 5/6/8 你写过三遍的词频统计吗？标准库里有现成的：
+# 还记得 第 5 课/6/8 你写过三遍的词频统计吗？标准库里有现成的：
 words = "hello world hello python world hello".split()
 c = Counter(words)
 print(c)                          # Counter({'hello': 3, 'world': 2, 'python': 1})
@@ -101,7 +101,7 @@ print(c["不存在的词"])              # 0  ← 不会 KeyError，比 dict 省
 #   现在开始，这种活可以放心交给标准库了。
 
 from collections import defaultdict
-# Day 12 的 setdefault 分组，用 defaultdict 更干净：
+# 第 12 课的 setdefault 分组，用 defaultdict 更干净：
 by_type = defaultdict(list)              # 访问不存在的键时自动建一个空列表
 for w in words:
     by_type[len(w)].append(w)
@@ -129,7 +129,7 @@ print(f"\n当前文件的 __name__ = {__name__!r}")
 
 # 我给你写了个示范模块 textstats.py，就在旁边。先做两件事：
 #   1. 打开 textstats.py 读一遍，看它的结构
-#   2. 在终端直接运行它：python week2/textstats.py   ← 会看到自测输出
+#   2. 在终端直接运行它：python stage2/textstats.py   ← 会看到自测输出
 # 然后看下面 import 它会发生什么：
 
 import textstats
@@ -143,7 +143,7 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 
 # 为什么 import textstats 能找到它？
 #   Python 找模块的顺序大致是：当前脚本所在的目录 → 标准库 → 已安装的第三方包。
-#   textstats.py 和这个文件在同一个 week2/ 里，所以直接就找到了。
+#   textstats.py 和这个文件在同一个 stage2/ 里，所以直接就找到了。
 #   如果它在别的文件夹，就要用包（package）的写法，那是以后的事。
 
 
@@ -151,6 +151,22 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 # 读一读（四）：venv 和 pip（在终端做，不在这个文件里）
 # ============================================================
 """
+⚠️ 事后更正（这一段在你学完之后改了主意，原文保留，读的时候注意）
+
+    这门课后来决定**暂时不用虚拟环境**。原因：venv 解决的是"两个项目要不同版本的
+    同一个库"的冲突，你现在只有一个 Python 项目，没有冲突可解；而每开一个新终端
+    都要 activate、忘了就报 ModuleNotFoundError 的成本是实打实的 ——
+    这个坑你在第 5 题已经踩过一次了。
+
+    所以现在：装包直接 `pip3 install xxx`，跑代码直接 `python3 xxx.py`。
+
+    下面这一整段**不用照做，但要读懂**。你要知道 venv 是什么、它在解决什么问题，
+    等哪天你同时搞两个项目、版本真的打架了，回来照着做就行。那才是学它的正确时机。
+
+    唯一现在就要保留的习惯是 requirements.txt（见第 6 步），它跟 venv 无关。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 虚拟环境解决的问题，跟 node_modules 一样：
 项目 A 要 requests 2.0，项目 B 要 requests 3.0，装在系统里就打架了。
 虚拟环境 = 给每个项目一份独立的包目录。
@@ -195,7 +211,7 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 • 忘了激活会怎样：pip install 装到系统 Python 里去了，
   然后 VS Code 里 import 报 ModuleNotFoundError，你会找半天。
   记住一个检查动作：看提示符有没有 (.venv)。
-• Day 18 要用 requests，Day 22 要用 fastapi，届时都装在这个环境里。
+• 第 18 课要用 requests，第 22 课要用 fastapi，届时都装在这个环境里。
 
 ━━━ 装完自测（在终端里跑）━━━
 
@@ -210,7 +226,7 @@ print(textstats.top_words("Python is fun and Python is fast", 2))
 # ============================================================
 
 # --- 第 1 题 ---
-# 用 random 写一个"猜数字"游戏，比 Day 3 那版进阶：
+# 用 random 写一个"猜数字"游戏，比 第 3 课那版进阶：
 #   答案随机生成 1-100，最多猜 7 次
 #   每次提示大了/小了，还剩几次
 #   猜中或次数用完都要给结论
@@ -263,9 +279,9 @@ print("|", end=" ")
 print("蓝球", f"{blue:02d}")
 
 # --- 第 3 题 ---
-# 用 Counter 重写 Day 8 第 3 题的词频统计，读 data/article.txt，输出出现最多的 5 个词。
-# 然后跟你 Day 8 手写的版本对比一下：代码少了多少行？
-# 提示：读文件要用 Day 10 的 Path(__file__).parent
+# 用 Counter 重写 第 8 课第 3 题的词频统计，读 data/article.txt，输出出现最多的 5 个词。
+# 然后跟你 第 8 课手写的版本对比一下：代码少了多少行？
+# 提示：读文件要用 第 10 课的 Path(__file__).parent
 # TODO
 from collections import Counter
 from pathlib import Path
@@ -288,15 +304,15 @@ for word, times in top5:
     
 
 # --- 第 4 题（今天最重要的一题）---
-# 建一个你自己的模块 week2/mytools.py，把这个月写过的好东西都收进去：
+# 建一个你自己的模块 stage2/mytools.py，把这个月写过的好东西都收进去：
 #
-#   load_json(path, default=None)      Day 12 写的
-#   save_json(data, path)              Day 12 写的
-#   safe_int(text, default=0)          Day 11 第 1 题写的
-#   get_number(prompt, low, high)      Day 11 第 2 题写的
-#   average(numbers)                   Day 6 写的
-#   grade(score)                       Day 6/7 写的
-#   mask_phone(phone)                  Day 8 第 4 题写的
+#   load_json(path, default=None)      第 12 课写的
+#   save_json(data, path)              第 12 课写的
+#   safe_int(text, default=0)          第 11 课第 1 题写的
+#   get_number(prompt, low, high)      第 11 课第 2 题写的
+#   average(numbers)                   第 6 课写的
+#   grade(score)                       第 6 课/7 写的
+#   mask_phone(phone)                  第 8 课第 4 题写的
 #
 # 要求：
 #   [ ] 每个函数都有 docstring
@@ -306,7 +322,7 @@ for word, times in top5:
 # 然后在这个文件里 import mytools，调用其中至少 3 个函数验证能用。
 #
 # 这个 mytools.py 不是练习，是你真的会一直用下去的东西 ——
-# Day 14 通讯录、Day 20 待办工具都会 import 它。
+# 第 14 课通讯录、第 20 课待办工具都会 import 它。
 # TODO
 
 import mytools
@@ -377,7 +393,7 @@ text = Path("demo.txt").read_text(encoding="utf-8")
 print(text)
 
 # 3. 查看路径组成
-p = Path("/Users/tian/Downloads/Study/python/week2/textstats.py")
+p = Path("/Users/tian/Downloads/Study/python/stage2/textstats.py")
 print(p.parts)
 
 

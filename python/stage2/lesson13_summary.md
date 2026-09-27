@@ -1,10 +1,11 @@
-# Day 13 学习总结
+# 第 13 课学习总结
 
 ## 为什么学这个很重要
 
 | 重要点 | 说明 |
 | --- | --- |
 | 模块是代码复用的基础 | 把常用功能拆出去，再用 `import` 调用，代码会更清晰，也更容易维护。 |
+| 模块是复用别人写的模块，帮别人做模块 | 你不一定每次都自己写全部功能，有时候是复用别人做好的模块；你也会把自己的工具模块提供给别人用。 |
 | `import` 是程序之间的连接方式 | 你以后写项目时，不可能所有代码都堆在一个文件里。模块化是必须掌握的能力。 |
 | `__name__ == "__main__"` 很关键 | 它是 Python 中最重要的“区分入口”和“可导入模块”的机制。 |
 | 虚拟环境解决依赖冲突 | 不同项目可能需要不同版本的库，虚拟环境让每个项目独立运行。 |
@@ -70,6 +71,12 @@ print(random.randint(1, 6))
 print(json.dumps({"a": 1}))
 ```
 
+输出：
+```python
+4
+{"a": 1}
+```
+
 ```python
 from pathlib import Path
 from datetime import datetime
@@ -78,18 +85,35 @@ print(Path.cwd())
 print(datetime.now())
 ```
 
+输出：
+```python
+/Users/tian/Downloads/Study
+2026-09-05 10:00:00
+```
+
 ### 2. `__name__` 的区别
 ```python
 print(__name__)
 ```
 
+输出：
+```python
+__main__
+```
+
+说明：
 - 直接运行这个文件：`__name__ == "__main__"`
-- 被别的文件import：`__name__ == "textstats"` 或其他模块名
+- 被别的文件 import：`__name__ == "textstats"` 或其他模块名
 
 ### 3. `if __name__ == "__main__":` 的写法
 ```python
 if __name__ == "__main__":
     print("我只在直接运行时才执行")
+```
+
+输出：
+```python
+我只在直接运行时才执行
 ```
 
 ### 4. `textstats.py` 里的标准模块结构
@@ -104,6 +128,11 @@ def summary(text):
 
 if __name__ == "__main__":
     print(summary("Python is fun"))
+```
+
+输出：
+```python
+...
 ```
 
 ### 5. `mytools.py` 的通用工具库思路
@@ -123,6 +152,12 @@ def safe_int(text, default=0):
     ...
 ```
 
+输出：
+```python
+# 不直接运行时，没有输出
+# 只有在导入后调用这些函数时才会有结果
+```
+
 ### 6. venv 和 pip 的典型流程
 ```bash
 cd /Users/tian/Downloads/Study/python
@@ -132,6 +167,11 @@ pip install requests
 python -c "import requests; print(requests.__version__)"
 ```
 
+输出：
+```bash
+2.32.3
+```
+
 ### 7. 请求第三方库时的错误处理方式
 ```python
 try:
@@ -139,6 +179,11 @@ try:
     print("requests 版本：", requests.__version__)
 except ModuleNotFoundError:
     print("还没装 requests，先激活 .venv 再 pip install requests")
+```
+
+输出：
+```python
+还没装 requests，先激活 .venv 再 pip install requests
 ```
 
 ## 这一天最重要的提醒
@@ -152,4 +197,4 @@ except ModuleNotFoundError:
 
 ## 一句话总结
 
-Day 13 的核心是：学会把代码拆成模块、用 `__name__` 控制入口、学会用虚拟环境和 `pip` 安装依赖，并把常用函数整理进自己的 `mytools.py`，让程序从“会写脚本”走向“会写工具”。
+第 13 课的核心是：学会把代码拆成模块、用 `__name__` 控制入口、学会用虚拟环境和 `pip` 安装依赖，并把常用函数整理进自己的 `mytools.py`，让程序从“会写脚本”走向“会写工具”。
