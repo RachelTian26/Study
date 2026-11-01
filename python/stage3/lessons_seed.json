@@ -1,0 +1,28 @@
+{
+  "_说明": "每节课的学习日期，从 git 提交记录里翻出来的真实日期。第 19 课的工具读这个文件来算'隔了多久没复习'。学完新的一课就往里加一条。",
+  "_字段": {
+    "num": "课号",
+    "title": "这节课讲什么",
+    "learned": "学习日期（首次 git commit 的日期）",
+    "summary": "对应的 summary 文件，相对 python/ 目录"
+  },
+  "lessons": [
+    {"num": 1,  "title": "变量 · 输出 · 数据类型", "learned": "2026-08-08", "summary": "stage1/lesson01_summary.md"},
+    {"num": 2,  "title": "输入 · 运算 · 条件判断", "learned": "2026-08-08", "summary": "stage1/lesson02_summary.md"},
+    {"num": 3,  "title": "循环 for / while / range", "learned": "2026-08-08", "summary": "stage1/lesson03_summary.md"},
+    {"num": 4,  "title": "列表 list", "learned": "2026-08-08", "summary": "stage1/lesson04_summary.md"},
+    {"num": 5,  "title": "字典 dict + 集合 set", "learned": "2026-08-08", "summary": "stage1/lesson05_summary.md"},
+    {"num": 6,  "title": "函数 def", "learned": "2026-08-08", "summary": "stage1/lesson06_summary.md"},
+    {"num": 7,  "title": "阶段综合：成绩统计器", "learned": "2026-08-08", "summary": "stage1/lesson07_summary.md"},
+    {"num": 8,  "title": "字符串处理与格式化", "learned": "2026-08-09", "summary": "stage2/lesson08_summary.md"},
+    {"num": 9,  "title": "自测 + Codewars", "learned": "2026-08-15", "summary": "stage2/lesson09_summary.md"},
+    {"num": 10, "title": "文件读写", "learned": "2026-08-15", "summary": "stage2/lesson10_summary.md"},
+    {"num": 11, "title": "异常处理 try/except", "learned": "2026-08-16", "summary": "stage2/lesson11_summary.md"},
+    {"num": 12, "title": "JSON 读写", "learned": "2026-08-22", "summary": "stage2/lesson12_summary.md"},
+    {"num": 13, "title": "模块导入 + pip", "learned": "2026-08-29", "summary": "stage2/lesson13_summary.md"},
+    {"num": 15, "title": "类和对象", "learned": "2026-09-05", "summary": "stage3/lesson15_summary.md"},
+    {"num": 16, "title": "datetime 时间处理", "learned": "2026-09-06", "summary": "stage3/lesson16_summary.md"},
+    {"num": 17, "title": "requests 调 HTTP API", "learned": "2026-09-27", "summary": "stage3/lesson17_summary.md"},
+    {"num": 18, "title": "用 Python 调方舟大模型", "learned": "2026-10-11", "summary": "stage3/lesson18_summary.md"}
+  ]
+}
