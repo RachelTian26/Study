@@ -228,7 +228,7 @@ calendar-app/
 
 ```env
 PORT=3001
-APP_PASSWORD=admin123
+APP_PASSWORD=your-admin-password
 JWT_SECRET=你的随机密钥
 AI_API_KEY=你的火山引擎API Key
 AI_API_BASE=https://ark.cn-beijing.volces.com/api/coding/v3

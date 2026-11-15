@@ -219,3 +219,9 @@ __marimo__/
 
 # 系统垃圾文件
 .DS_Store
+
+# 本地待办清单，只在这台电脑上用
+/TODOS.md
+
+# calendar-app：整个应用仅在本机开发，不进 Git
+/calendar-app/
