@@ -1,0 +1,8 @@
+{
+  "title": "为什么日期不能用字符串比较",
+  "lines": [
+    {"en": "Is September the fifteenth before October the first?", "zh": "9 月 15 日在 10 月 1 日前面吗？"},
+    {"en": "Compare them as strings, and Python says no.", "zh": "把它们当字符串比，Python 说不是。"},
+    {"en": "Turn them into date objects first, then compare.", "zh": "先把它们变成日期对象，再比较。"}
+  ]
+}

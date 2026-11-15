@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第 22 课：把秒数收到 Python 手里</title>
+  <style>
+    :root {
+      --bg: #f7f5ff;
+      --card: #ffffff;
+      --ink: #2b2545;
+      --muted: #6f6a86;
+      --blue: #4f7cff;
+      --green: #2fbf8f;
+      --orange: #ff9f43;
+      --red: #ff6b6b;
+      --line: #e7e2f2;
+      --shadow: 0 14px 30px rgba(80, 70, 150, .10);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 40px 20px 70px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 34px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 44px);
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 17px;
+      margin: 0 auto;
+      max-width: 700px;
+    }
+
+    .cards {
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 24px 24px 22px;
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+    }
+
+    .step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--blue);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .analogy {
+      background: #fff8e9;
+      border-left: 5px solid var(--orange);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 14px 0;
+    }
+
+    pre {
+      background: #221f36;
+      color: #f7f2ff;
+      border-radius: 14px;
+      padding: 15px 16px;
+      overflow-x: auto;
+      font-size: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      line-height: 1.55;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .94em;
+    }
+
+    .demo {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 12px 0 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 9px 13px;
+      cursor: pointer;
+      background: #efeaff;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    button:hover { filter: brightness(.96); }
+    button:active { transform: translateY(1px); }
+
+    .output {
+      background: #f2f5ff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 15px;
+      color: #30438c;
+      min-height: 26px;
+    }
+
+    .why {
+      color: var(--muted);
+      margin-top: 14px;
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0 4px;
+    }
+
+    .node {
+      background: #eef6ff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      text-align: center;
+      flex: 1 1 120px;
+    }
+
+    .arrow {
+      font-size: 22px;
+      color: var(--muted);
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .big {
+      display: block;
+      font-size: 26px;
+      font-weight: 800;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 620px) {
+      .arrow { display: none; }
+      .node { flex-basis: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>第 22 课：把“秒数”收到 Python 手里</h1>
+      <p class="subtitle">现在只做一件事：给每个声音文件量时间。后面做字幕、做视频，全靠这些秒数。</p>
+    </header>
+
+    <section class="cards">
+      <article class="card">
+        <h2><span class="step">1</span>先想清楚：今天在算什么？</h2>
+        <div class="flow">
+          <div class="node">📄 一个声音文件<br><span class="note">hello.aiff</span></div>
+          <div class="arrow">→</div>
+          <div class="node">⏱️ 场记量时长<br><span class="note">ffprobe</span></div>
+          <div class="arrow">→</div>
+          <div class="node">📨 Python 拿到数字<br><span class="note">2.003991</span></div>
+          <div class="arrow">→</div>
+          <div class="node">➕ 加总<br><span class="note">每句几秒</span></div>
+        </div>
+        <p class="why">为什么要这个数字？因为第 23 课字幕要按秒出现，第 25 课画面要按秒翻页。今天先把时间量出来。</p>
+      </article>
+
+      <article class="card">
+        <h2><span class="step">2</span>不写 capture_output，等于没听见</h2>
+        <div class="analogy">🔊 场记对着全场喊“2 秒！”导演没记下来，等于白喊。</div>
+        <pre>r = subprocess.run(probe)
+print(r.stdout)   # None</pre>
+        <div class="analogy">📨 让场记把结果写在纸条上递过来，导演才真正拿到。</div>
+        <pre>r = subprocess.run(probe, capture_output=True, text=True)
+print(r.stdout)   # 2.003991\n</pre>
+        <div class="demo">
+          <button onclick="shout('喊出来')">🔊 试：场记喊出来</button>
+          <button onclick="shout('递纸条')">📨 试：场记递纸条</button>
+        </div>
+        <div class="output" id="demo1">点左边两个按钮，看 Python 拿到什么</div>
+      </article>
+
+      <article class="card">
+        <h2><span class="step">3</span>纸条上的字，不是数字</h2>
+        <p>场记递过来的是字：<code>"2.003991"</code>。字和字相加，只会粘在一起。</p>
+        <pre>paper = "2.003991"
+print(paper + "0.4")   # 2.0039910.4</pre>
+        <p>用 <code>float()</code> 把它翻译成数字，才能加 0.4。</p>
+        <pre>seconds = float(paper)
+print(seconds + 0.4)   # 2.403991</pre>
+        <div class="demo">
+          <button onclick="math('text')">📝 试：按文字加</button>
+          <button onclick="math('number')">🧮 试：按数字加</button>
+        </div>
+        <div class="output" id="demo2">点按钮看看区别</div>
+      </article>
+
+      <article class="card">
+        <h2><span class="step">4</span>文件名要补零：line01 不是 line1</h2>
+        <p>文件名是按“字”排队，不是按数字大小排队。不补零就会乱：</p>
+        <div class="demo">
+          <button onclick="sort('no')">❌ 不补零</button>
+          <button onclick="sort('yes')">✅ 补零</button>
+        </div>
+        <div class="output" id="demo3">点按钮看看排队顺序</div>
+        <pre>for n in [1, 2, 10]:
+    print(f"line{n:02d}.aiff")
+
+# line01.aiff
+# line02.aiff
+# line10.aiff</pre>
+        <p class="why">再加一句 <code>mkdir(parents=True, exist_ok=True)</code>：文件夹没有就建，已经有也不报错。</p>
+      </article>
+
+      <article class="card">
+        <h2><span class="step">5</span>最后合起来：给 3 句话配音并算总时长</h2>
+        <div class="flow">
+          <div class="node">📖 读剧本<br><span class="note">script_demo.json</span></div>
+          <div class="arrow">→</div>
+          <div class="node">🎙️ 每句配音<br><span class="note">say</span></div>
+          <div class="arrow">→</div>
+          <div class="node">⏱️ 每句量时长<br><span class="note">ffprobe</span></div>
+          <div class="arrow">→</div>
+          <div class="node">➕ 加总<br><span class="big">8.48 秒</span></div>
+        </div>
+        <p class="why">这里最后一个隐患是：如果某个文件不存在，场记交来一张空纸条，<code>float("")</code> 就会报看不懂的错。所以第 2 题要写一个会返回 <code>None</code> 的 <code>duration_of()</code>。</p>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    const demo1 = document.getElementById("demo1");
+    const demo2 = document.getElementById("demo2");
+    const demo3 = document.getElementById("demo3");
+
+    function shout(mode) {
+      if (mode === "喊出来") {
+        demo1.textContent = "屏幕上出现：2.003991\nPython 拿到：None";
+      } else {
+        demo1.textContent = "Python 拿到纸条：\"2.003991\\n\"";
+      }
+    }
+
+    function math(mode) {
+      if (mode === "text") {
+        demo2.textContent = "\"2.003991\" + \"0.4\" = \"2.0039910.4\"（粘在一起）";
+      } else {
+        demo2.textContent = "2.003991 + 0.4 = 2.403991（真正的加法）";
+      }
+    }
+
+    function sort(mode) {
+      if (mode === "no") {
+        demo3.textContent = "['line1.aiff', 'line10.aiff', 'line2.aiff']  ← 乱了";
+      } else {
+        demo3.textContent = "['line01.aiff', 'line02.aiff', 'line10.aiff']  ← 正确";
+      }
+    }
+  </script>
+</body>
+</html>
