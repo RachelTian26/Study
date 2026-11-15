@@ -1,7 +1,7 @@
 # ruff 配置 —— 一个自动帮你抓错的工具（第 2 周新增）
 #
 # 已装好（ruff 0.16.2），不用再装。
-# 用它：  cd /Users/tian/Downloads/Study/python && python3 -m ruff check week2/
+# 用它：  cd ~/Downloads/Study/python && python3 -m ruff check stageN/
 #
 # 装完之后在 VS Code 里装 "Ruff" 扩展（发布者 Astral Software），
 # 它会在你写代码的时候直接画波浪线，不用手动跑命令。
@@ -39,4 +39,8 @@ ignore = [
 ]
 "stage3/review_*.py" = [
     "B006",   # 可变默认参数 —— 复习"猜输出"故意放的坑，波浪线会提前泄露答案
+]
+"stage4/reading/*.py" = [
+    "E401",   # 一行 import 多个模块 —— Opus 原版脚本，原样保留，第 27 课拿来审
+    "E702",   # 分号把几句挤在一行 —— 同上，这正是要你挑出来的写法
 ]
